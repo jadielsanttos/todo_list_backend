@@ -23,10 +23,9 @@ Route::get('/auth/401', [AuthController::class, 'unauthorized'])->name('login');
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/register', [AuthController::class, 'register']);
+Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::middleware('auth')->group(function(){
-    Route::get('/auth/logout', [AuthController::class, 'logout']);
-
+Route::middleware('auth:sanctum')->group(function(){
     Route::post('/task/new', [TaskController::class, 'store']);
     Route::get('/tasks', [TaskController::class, 'getAll']);
     Route::get('/task/{id}', [TaskController::class, 'get']);

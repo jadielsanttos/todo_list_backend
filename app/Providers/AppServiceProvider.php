@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Contracts\TaskRepositoryInterface;
 use App\Repositories\TaskRepository;
-use App\Repositories\TaskRepositoryInterface;
 use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
 

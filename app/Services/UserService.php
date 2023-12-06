@@ -5,8 +5,9 @@ namespace App\Services;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
-class UserServices
+class UserService
 {
     private $repo;
 
@@ -15,15 +16,60 @@ class UserServices
         $this->repo = $repo;
     }
 
-    public function store(array $data): JsonResponse
+    public function store(array $fields): JsonResponse
     {
-        $user = $this->repo->findByEmail($data['id']);
+        $verifyEmailExists = $this->repo->findByEmail($fields['email']);
 
-        if($user > 0) {
-            return response()->json(['error' => 'Já existe um usuário com este email!'], Response::HTTP_UNAUTHORIZED);
+        if(!empty($verifyEmailExists)) {
+            return response()->json([
+                'error' => 'Já existe um usuário com este email!'
+            ],
+                Response::HTTP_UNAUTHORIZED
+            );
         }
 
-        return $this->repo->store($data);
+        // Criptografar senha
+        $password = password_hash($fields['password'], PASSWORD_DEFAULT);
+
+        // Criar usuario
+        $newFields = [
+            'email'    => $fields['email'],
+            'password' => $password
+        ];
+
+        $createUser = $this->repo->store($newFields);
+
+        // Criar token
+        $token = $createUser->createToken('register_token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Usuário criado com sucesso!',
+            'token'   => $token
+        ],
+            Response::HTTP_OK
+        );
+    }
+
+    public function login(array $fields): JsonResponse
+    {
+        if(Auth::attempt($fields)) {
+            $user = Auth::user();
+
+            $token = $user->createToken('login_token')->plainTextToken;
+
+            return response()->json([
+                'message' => 'Logado com sucesso!',
+                'token'   => $token
+            ],
+                Response::HTTP_ACCEPTED
+            );
+        }
+
+        return response()->json([
+            'error' => 'Dados incorretos!'
+        ],
+            Response::HTTP_UNAUTHORIZED
+        );
     }
 
     public function get(string $id): JsonResponse

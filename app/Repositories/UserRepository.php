@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 
 class UserRepository implements UserRepositoryInterface
@@ -25,6 +26,6 @@ class UserRepository implements UserRepositoryInterface
 
     public function findByEmail(string $email)
     {
-        return $this->model->find($email)->count();
+        return $this->model->where('email', $email)->first();
     }
 }
