@@ -11,18 +11,18 @@ class TaskController extends Controller
 {
     private $service;
 
-    private $loggedUser;
-
     public function __construct(TaskService $service)
     {
         $this->service = $service;
-
-        $this->loggedUser = Auth::user();
     }
 
     public function store(Request $request)
     {
+
+        $loggedUser = Auth::user();
+
         $data = [
+            'user_id'     => $loggedUser->id,
             'title'       => $request->title,
             'description' => $request->description,
             'author'      => $request->author
@@ -33,7 +33,9 @@ class TaskController extends Controller
 
     public function getAll()
     {
-        return $this->service->getAll();
+        $loggedUser = Auth::user();
+
+        return $this->service->getAll($loggedUser->id);
     }
 
     public function get($id)

@@ -20,9 +20,9 @@ class TaskRepository implements TaskRepositoryInterface
         return $this->model->create($data);
     }
 
-    public function getAll()
+    public function getAll($userID)
     {
-        return $this->model->all();
+        return $this->model->where('user_id', $userID)->get();
     }
 
     public function get($id)
