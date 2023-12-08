@@ -23,6 +23,8 @@ Route::get('/auth/401', [AuthController::class, 'unauthorized'])->name('login');
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/register', [AuthController::class, 'register']);
+
+Route::get('/auth/validate', [AuthController::class, 'validateToken'])->middleware('auth:sanctum');
 Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function(){
