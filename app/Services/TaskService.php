@@ -19,7 +19,7 @@ class TaskService
     {
         $createTask = $this->repo->store($data);
 
-        $createdTask = $this->repo->get($createTask->id);
+        $createdTask = $this->repo->get($createTask->id, $data['user_id']);
 
         return response()->json([
             'message' => 'Tarefa criada com sucesso!',
@@ -40,13 +40,13 @@ class TaskService
         );
     }
 
-    public function get($id): JsonResponse
+    public function get($taskID, $userID): JsonResponse
     {
-        $task = $this->repo->get($id);
+        $task = $this->repo->get($taskID, $userID);
 
         if(empty($task)) {
             return response()->json([
-                'message' => 'Tarefa não encontrada!'
+                'error' => 'Tarefa não encontrada!'
             ],
                 Response::HTTP_NOT_FOUND
             );
@@ -60,19 +60,19 @@ class TaskService
         );
     }
 
-    public function update(array $data, $id): JsonResponse
+    public function update(array $data, $taskID, $userID): JsonResponse
     {
-        $findTask = $this->repo->get($id);
+        $findTask = $this->repo->get($taskID, $userID);
 
         if(!$findTask) {
             return response()->json([
-                'message' => 'Tarefa não encontrada!'
+                'error' => 'Tarefa não encontrada!'
             ],
                 Response::HTTP_NOT_FOUND
             );
         }
 
-        $taskUpdated = $this->repo->update($data, $id);
+        $taskUpdated = $this->repo->update($data, $taskID, $userID);
 
         return response()->json([
             'message' => 'Tarefa editada com sucesso!',
@@ -82,23 +82,23 @@ class TaskService
         );
     }
 
-    public function destroy($id)
+    public function destroy($taskID, $userID)
     {
-        $findTask = $this->repo->get($id);
+        $findTask = $this->repo->get($taskID, $userID);
 
         if(!$findTask) {
             return response()->json([
-                'message' => 'Tarefa não encontrada!'
+                'error' => 'Tarefa não encontrada!'
             ],
                 Response::HTTP_NOT_FOUND
             );
         }
 
-        $taskDeleted = $this->repo->destroy($id);
+        $taskDeleted = $this->repo->destroy($taskID, $userID);
 
         return response()->json([
             'message' => 'Tarefa editada com sucesso!',
-            'data' => $taskDeleted
+            'data'    => $taskDeleted
         ],
             Response::HTTP_OK
         );

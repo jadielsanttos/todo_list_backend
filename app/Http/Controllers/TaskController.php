@@ -38,24 +38,30 @@ class TaskController extends Controller
         return $this->service->getAll($loggedUser->id);
     }
 
-    public function get($id)
+    public function get($taskID)
     {
-        return $this->service->get($id);
+        $loggedUser = Auth::user();
+
+        return $this->service->get($taskID, $loggedUser->id);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $taskID)
     {
+        $loggedUser = Auth::user();
+
         $data = [
             'title'       => $request->title,
             'description' => $request->description,
             'author'      => $request->author
         ];
 
-        return $this->service->update($data, $id);
+        return $this->service->update($data, $taskID, $loggedUser->id);
     }
 
-    public function destroy($id)
+    public function destroy($taskID)
     {
-        return $this->service->destroy($id);
+        $loggedUser = Auth::user();
+
+        return $this->service->destroy($taskID, $loggedUser->id);
     }
 }

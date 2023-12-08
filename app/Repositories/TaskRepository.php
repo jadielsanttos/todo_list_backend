@@ -25,18 +25,24 @@ class TaskRepository implements TaskRepositoryInterface
         return $this->model->where('user_id', $userID)->get();
     }
 
-    public function get($id)
+    public function get($taskId, $userID)
     {
-        return $this->model->find($id);
+        return $this->model->where('id', $taskId)
+            ->where('user_id', $userID)
+            ->first();
     }
 
-    public function update(array $data, $id)
+    public function update(array $data, $taskID, $userID)
     {
-        return $this->model->find($id)->update($data);
+        return $this->model->where('id', $taskID)
+            ->where('user_id', $userID)
+            ->first()->update($data);
     }
 
-    public function destroy($id)
+    public function destroy($taskID, $userID)
     {
-        return $this->model->find($id)->delete();
+        return $this->model->where('id', $taskID)
+            ->where('user_id', $userID)
+            ->first()->delete();
     }
 }
