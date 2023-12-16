@@ -15,7 +15,7 @@ class TaskService
         $this->repo = $repo;
     }
 
-    public function store(array $data): JsonResponse
+    public function store($data): JsonResponse
     {
         $createTask = $this->repo->store($data);
 
@@ -29,9 +29,15 @@ class TaskService
         );
     }
 
-    public function getAll($userID): JsonResponse
+    public function getAll($userID, $order): JsonResponse
     {
-        $tasks = $this->repo->getAll($userID);
+        $queryParam = request('order');
+
+        if($queryParam !== null && $queryParam === 'updated_at') {
+            $order = $queryParam;
+        }
+
+        $tasks = $this->repo->getAll($userID, $order);
 
         return response()->json([
             'message' => '', 'data' => $tasks
@@ -60,7 +66,7 @@ class TaskService
         );
     }
 
-    public function update(array $data, $taskID, $userID): JsonResponse
+    public function update($data, $taskID, $userID): JsonResponse
     {
         $findTask = $this->repo->get($taskID, $userID);
 
@@ -97,7 +103,7 @@ class TaskService
         $taskDeleted = $this->repo->destroy($taskID, $userID);
 
         return response()->json([
-            'message' => 'Tarefa editada com sucesso!',
+            'message' => 'Tarefa excluida com sucesso!',
             'data'    => $taskDeleted
         ],
             Response::HTTP_OK

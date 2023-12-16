@@ -6,8 +6,8 @@ interface TaskRepositoryInterface
 {
     public function __construct();
     public function store(array $data);
-    public function getAll($userID);
-    public function get($taskID, $userID);
-    public function update(array $data, $taskID, $userID);
-    public function destroy($taskID, $userID);
+    public function getAll(int $userID, string $order);
+    public function get(string $taskID, int $userID);
+    public function update(array $data, string $taskID, int $userID);
+    public function destroy(string $taskID, int $userID);
 }

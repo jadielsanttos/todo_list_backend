@@ -35,7 +35,9 @@ class TaskController extends Controller
     {
         $loggedUser = Auth::user();
 
-        return $this->service->getAll($loggedUser->id);
+        $order = 'id';
+
+        return $this->service->getAll($loggedUser->id, $order);
     }
 
     public function get($taskID)
