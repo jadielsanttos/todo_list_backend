@@ -1,66 +1,93 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Todo List Backend
+This project is an API with **JWT** authentication built using **PHP**, **Laravel** and **MySQL**. I'm using the **repositories** pattern and the **service** layer, that is very important thinking in `maintainable` and `scalable`.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Content Table
+* <a href="#installations">Installations</a>
+* <a href="#settings">Settings</a>
+* <a href="#endpoints">Endpoints</a>
+* <a href="#run-project">Run</a>
 
-## About Laravel
+# Install Project
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+```bash
+git clone https://github.com/jadielsanttos/todo_list_backend
+```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+```bash
+cd todo_list_backend
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+# Settings
 
-## Learning Laravel
+1 - Run command composer install to generate composer.json
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```bash
+composer install
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+2 - With your database already created, add and change .env file to connect with your database
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+cp .env.example .env
+```
 
-## Laravel Sponsors
+3 - Create application key
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+php artisan key:generate
+```
 
-### Premium Partners
+4 - Run migrations
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+```bash
+php artisan migrate
+```
 
-## Contributing
+# Endpoints
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Users Routes
 
-## Code of Conduct
+* ### POST /auth/login:
+    * To login at the system, access `/auth/login`, the fields **email** and **password** are required.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    * A token of authentication will be generated.
 
-## Security Vulnerabilities
+* ### POST /auth/register:
+    * To create an account, access `/auth/register`, the fields **email** and **password** are required too.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    * A token of authentication will be generated.
 
-## License
+* ### POST /auth/logout:
+    * To logout, access `/auth/logout`, the **token** must be sent.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+* ### GET /auth/validate:
+    * To validate token, access `/auth/validate`, the **token** must be sent.
+
+## Tasks Routes
+
+* ### GET /tasks:
+    * To get all tasks of logged user, access `/tasks`, the **token** must be sent.
+
+* ### GET /task/{id}:
+    * To get single task, access `/task/{id}`, the id of task must be sent. The **token** must be sent too.
+
+* ### POST /task/new:
+    * To create a new task, access `/task/new`, the fields **title**, **description** and **author** are required. The **token** must be sent.
+
+* ### PUT /task/update/{id}:
+    * To update a task, access `/task/update/{id}`, the id of task must be sent. The **token** must be sent too.
+
+* ### DELETE /task/delete/{id}:
+    * To delete a task, access `/task/delete/{id}`, the id of task must be sent. The **token** must be sent too.
+
+# Run Project
+
+Finally, to run the application, just do it bellow
+
+1 - Run the command
+
+```bash
+php artisan serve
+```
+
+2 - Access [http://localhost:8000/api/ping](http://localhost:8000/api/ping) and just be happy
