@@ -1,5 +1,7 @@
 # Todo List Backend
-This project is an API with **JWT** authentication built using **PHP**, **Laravel** and **MySQL**. I'm using the **repositories** pattern and the **service** layer, that is very important thinking in `maintainable` and `scalable`.
+This project is an API with **JWT** authentication built using **PHP**, **Laravel** and **MySQL**. I'm using the **repositories** pattern and the **service** layer, that is very important thinking in `maintainability` and `scalability`.
+
+<img src="public/images/print_api_laravel.png">
 
 # Content Table
 * <a href="#installations">Installations</a>
@@ -90,4 +92,4 @@ Finally, to run the application, just do it bellow
 php artisan serve
 ```
 
-2 - Access [http://localhost:8000/api/ping](http://localhost:8000/api/ping) and just be happy
+2 - Access [http://localhost:8000](http://localhost:8000) and just be happy
