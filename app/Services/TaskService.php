@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\Contracts\TaskRepositoryInterface;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use DateTime;
 
 class TaskService
 {
@@ -39,8 +40,27 @@ class TaskService
 
         $tasks = $this->repo->getAll($userID, $order);
 
+        $finalList = ['data' => []];
+
+        foreach($tasks as $task) {
+            $dataTarget = $task->updated_at;
+            $dateCurrent = New DateTime('now');
+
+            $msgUpdatedAt = $this->calculateDiffBetweenDates($dataTarget, $dateCurrent);
+
+            $newList = [
+                'id'             => $task->id,
+                'user_id'        => $task->user_id,
+                'title'          => $task->title,
+                'description'    => $task->description,
+                'msg_updated_at' => $msgUpdatedAt
+            ];
+
+            array_push($finalList['data'], $newList);
+        }
+
         return response()->json([
-            'message' => '', 'data' => $tasks
+            'message' => '', 'data' => $finalList['data']
         ],
             Response::HTTP_OK
         );
@@ -108,5 +128,24 @@ class TaskService
         ],
             Response::HTTP_OK
         );
+    }
+
+    public static function calculateDiffBetweenDates($dateTarget, $dateCurrent): string
+    {
+        $interval = $dateTarget->diff($dateCurrent);
+
+        $msgUpdatedAt = '';
+
+        if($interval->format('%a') > '0') {
+            $msgUpdatedAt = $interval->format('Editado há %a').'d atrás';
+        }else if($interval->format('%h') > '0') {
+            $msgUpdatedAt = $interval->format('Editado há %h').'h atrás';
+        }else if($interval->format('%i') > '0') {
+            $msgUpdatedAt = $interval->format('Editado há %i').'m atrás';
+        }else {
+            $msgUpdatedAt = 'Editado agora mesmo';
+        }
+
+        return $msgUpdatedAt;
     }
 }
