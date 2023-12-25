@@ -18,6 +18,16 @@ class TaskService
 
     public function store($data): JsonResponse
     {
+        $findByTitle = $this->repo->findByTitle($data['title'], $data['user_id']);
+
+        if($findByTitle) {
+            return response()->json([
+                'error' => 'Você já possui uma tarefa com esse título!'
+            ],
+                Response::HTTP_OK
+            );
+        }
+
         $createTask = $this->repo->store($data);
 
         $createdTask = $this->repo->get($createTask->id, $data['user_id']);

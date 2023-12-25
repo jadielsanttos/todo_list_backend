@@ -34,6 +34,12 @@ class TaskRepository implements TaskRepositoryInterface
             ->first();
     }
 
+    public function findByTitle(string $taskTitle, int $userID) {
+        return $this->model->where('title', $taskTitle)
+            ->where('user_id', $userID)
+            ->first();
+    }
+
     public function update(array $data, string $taskID, int $userID)
     {
         return $this->model->where('id', $taskID)
