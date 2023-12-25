@@ -1,4 +1,9 @@
 # Todo List Backend
+
+![php](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![laravel](	https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![mysql](	https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white)
+
 This project is an API with **JWT** authentication built using **PHP**, **Laravel** and **MySQL**. I'm using the **repositories** pattern and the **service** layer, that is very important thinking in `maintainability` and `scalability`.
 
 <img src="public/images/print_api_laravel.png">
