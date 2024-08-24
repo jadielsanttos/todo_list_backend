@@ -18,35 +18,45 @@ class UserService
 
     public function store(array $fields): JsonResponse
     {
-        $verifyEmailExists = $this->repo->findByEmail($fields['email']);
+        // Verificar se os campos estão vazios
+        if($fields["email"] && $fields["password"]) {
+            $verifyEmailExists = $this->repo->findByEmail($fields['email']);
 
-        if(!empty($verifyEmailExists)) {
+            // Verificar se o email já existe
+            if(!empty($verifyEmailExists)) {
+                return response()->json([
+                    'error' => 'Já existe um usuário com este email!'
+                ],
+                    Response::HTTP_UNAUTHORIZED
+                );
+            }
+
+            // Criptografar senha
+            $password = password_hash($fields['password'], PASSWORD_DEFAULT);
+
+            // Criar usuario
+            $newFields = [
+                'email'    => $fields['email'],
+                'password' => $password
+            ];
+
+            $createUser = $this->repo->store($newFields);
+
+            // Criar token
+            $token = $createUser->createToken('register_token')->plainTextToken;
+
             return response()->json([
-                'error' => 'Já existe um usuário com este email!'
+                'message' => 'Usuário criado com sucesso!',
+                'token'   => $token
             ],
-                Response::HTTP_UNAUTHORIZED
+                Response::HTTP_OK
             );
         }
 
-        // Criptografar senha
-        $password = password_hash($fields['password'], PASSWORD_DEFAULT);
-
-        // Criar usuario
-        $newFields = [
-            'email'    => $fields['email'],
-            'password' => $password
-        ];
-
-        $createUser = $this->repo->store($newFields);
-
-        // Criar token
-        $token = $createUser->createToken('register_token')->plainTextToken;
-
         return response()->json([
-            'message' => 'Usuário criado com sucesso!',
-            'token'   => $token
+            'error' => 'Preencha todos os campos!'
         ],
-            Response::HTTP_OK
+            Response::HTTP_UNAUTHORIZED
         );
     }
 
